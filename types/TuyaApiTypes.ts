@@ -67,7 +67,9 @@ export type TuyaDeviceResponse = {
   icon: string;
   id: string;
   ip: string;
+  lat: string;
   local_key: string;
+  lon: string;
   name: string;
   online: boolean;
   owner_id: string;

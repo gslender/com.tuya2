@@ -12,12 +12,16 @@
       "$template": "welcome",
       "id": "welcome",
       "navigation": {
-        "next": "login_oauth2"
+        "next": "usercode"
       }
     },
     {
-      "id": "login_oauth2",
-      "template": "login_oauth2"
+      "id": "usercode",
+      "$template": "usercode"
+    },
+    {
+      "id": "qrcode",
+      "$template": "qrcode"
     },
     {
       "id": "list_devices",

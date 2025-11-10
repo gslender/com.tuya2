@@ -12,6 +12,7 @@ import type {
   TuyaStatusResponse,
 } from './types/TuyaApiTypes';
 import { type ArgumentAutocompleteResults } from 'homey/lib/FlowCard';
+import TuyaHasClient from './lib/TuyaHasClient';
 
 sourceMapSupport.install();
 
@@ -33,11 +34,16 @@ type AutoCompleteArg = {
 };
 
 module.exports = class TuyaOAuth2App extends OAuth2App {
-  static OAUTH2_CLIENT = TuyaOAuth2Client;
+  static OAUTH2_CLIENT = TuyaHasClient;
   static OAUTH2_DEBUG = process.env.DEBUG === '1';
   static OAUTH2_MULTI_SESSION = false; // TODO: Enable this feature & make nice pairing UI
 
   private apiCache: NodeCache = new NodeCache({ stdTTL: CACHE_TTL });
+
+  // TODO: Remove
+  async onShouldDeleteSession(): Promise<boolean> {
+    return false;
+  }
 
   async onOAuth2Init(): Promise<void> {
     await super.onOAuth2Init();
@@ -277,12 +283,12 @@ module.exports = class TuyaOAuth2App extends OAuth2App {
     this.log('Tuya started');
   }
 
-  getFirstSavedOAuth2Client(): TuyaOAuth2Client {
+  getFirstSavedOAuth2Client(): TuyaHasClient {
     const client = super.getFirstSavedOAuth2Client();
     if (!client) {
       throw new Error(this.homey.__('connection_failed'));
     }
 
-    return client as TuyaOAuth2Client;
+    return client as TuyaHasClient;
   }
 };

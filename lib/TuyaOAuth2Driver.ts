@@ -1,14 +1,19 @@
-import { OAuth2DeviceResult, OAuth2Driver } from 'homey-oauth2app';
+import { fetch, OAuth2DeviceResult, OAuth2Driver, OAuth2Util } from 'homey-oauth2app';
 import {
   type TuyaDeviceDataPointResponse,
   TuyaDeviceResponse,
   TuyaDeviceSpecificationResponse,
 } from '../types/TuyaApiTypes';
 import type { StandardFlowArgs, Translation } from '../types/TuyaTypes';
-import TuyaOAuth2Client from './TuyaOAuth2Client';
-import { sendSetting } from './TuyaOAuth2Util';
-
 import * as TuyaOAuth2Util from './TuyaOAuth2Util';
+import { sendSetting } from './TuyaOAuth2Util';
+import PairSession from 'homey/lib/PairSession';
+import { URL } from 'url';
+import { Response } from 'node-fetch';
+import { type TuyaQrCodeResponse } from '../types/TuyaHasApiTypes';
+import TuyaHasToken from './TuyaHasToken';
+import TuyaHasClient from './TuyaHasClient';
+import QRCode from 'qrcode';
 
 export type ListDeviceProperties = {
   store: {
@@ -25,10 +30,180 @@ export type ListDeviceProperties = {
   };
 };
 
-export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaOAuth2Client> {
+const USER_CODE_KEY = 'TUYA_USER_CODE';
+
+export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHasClient> {
   TUYA_DEVICE_CATEGORIES: ReadonlyArray<string> = [];
 
-  async onPairListDevices({ oAuth2Client }: { oAuth2Client: TuyaOAuth2Client }): Promise<OAuth2DeviceResult[]> {
+  async onPair(session: PairSession): Promise<void> {
+    const OAuth2ConfigId = this.getOAuth2ConfigId();
+    let OAuth2SessionId = '$new';
+    let client: TuyaHasClient = this.homey.app.createOAuth2Client({
+      sessionId: OAuth2Util.getRandomId(),
+      configId: OAuth2ConfigId,
+    });
+
+    const OAuth2Config = this.homey.app.getConfig({
+      configId: OAuth2ConfigId,
+    });
+    const { allowMultiSession } = OAuth2Config;
+    if (!allowMultiSession) {
+      const savedSessions = this.homey.app.getSavedOAuth2Sessions();
+      if (Object.keys(savedSessions).length) {
+        OAuth2SessionId = Object.keys(savedSessions)[0];
+        try {
+          client = this.homey.app.getOAuth2Client({
+            configId: OAuth2ConfigId,
+            sessionId: OAuth2SessionId,
+          });
+          this.log(`Multi-Session disabled. Selected ${OAuth2SessionId} as active session.`);
+        } catch (err) {
+          this.error(err);
+        }
+      }
+    }
+
+    let waitingForQrScan = true;
+    const clientId = 'HA_3y9q4ak7g4ephrvke';
+    const schema = 'haauthorize';
+
+    session.setHandler('showView', async view => {
+      // Skip authentication if we already have a session
+      if (view === 'usercode' && OAuth2SessionId !== '$new') {
+        session.showView('list_devices').catch(this.error);
+      }
+    });
+
+    const waitForQrCodeScan = async (qrcode: string, userCode: string): Promise<TuyaHasClient | undefined> => {
+      const url = new URL(`https://apigw.iotbing.com/v1.0/m/life/home-assistant/qrcode/tokens/${qrcode}`);
+      url.searchParams.append('clientid', clientId);
+      url.searchParams.append('usercode', userCode);
+
+      const wait = async (ms: number): Promise<void> => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      };
+
+      while (waitingForQrScan) {
+        try {
+          const tokenResponse = await fetch(url);
+
+          if (!tokenResponse.ok) {
+            throw new Error(tokenResponse.statusText);
+          }
+
+          const tokenJson = await tokenResponse.json();
+
+          if (!tokenJson.success && tokenJson.code === 'E0020003') {
+            // QR code was not scanned yet
+            await wait(500);
+            continue;
+          }
+
+          if (!tokenJson.success || !tokenJson.result) {
+            throw new Error(tokenJson.msg ?? tokenJson.code);
+          }
+
+          const tokenResult = tokenJson.result;
+          const token = new TuyaHasToken(tokenResult);
+          client.setToken({
+            token: token,
+          });
+
+          const session = await client.onGetOAuth2SessionInformation();
+          const sessionWasNew = OAuth2SessionId === '$new';
+          OAuth2SessionId = session.id;
+          const { title } = session;
+
+          if (sessionWasNew) {
+            // Destroy the temporary client
+            client.destroy();
+
+            // Replace the temporary client by the final one
+            client = this.homey.app.createOAuth2Client({
+              sessionId: session.id,
+              configId: OAuth2ConfigId,
+            });
+          }
+
+          client.setTitle({ title });
+          client.setToken({ token });
+
+          // NOTE: Save the client even if no device is added
+          client.save();
+
+          return client;
+        } catch (error) {
+          this.error('Error while fetching QR scan result:', error);
+        }
+        await wait(500);
+      }
+
+      return undefined;
+    };
+
+    session.setHandler('usercode', async userCode => {
+      const url = new URL('https://apigw.iotbing.com/v1.0/m/life/home-assistant/qrcode/tokens');
+      url.searchParams.append('clientid', clientId);
+      url.searchParams.append('schema', schema);
+      url.searchParams.append('usercode', userCode);
+
+      const qrcodeResponse: Response = await fetch(url, {
+        method: 'POST',
+      });
+
+      if (!qrcodeResponse.ok) {
+        throw new Error(qrcodeResponse.statusText);
+      }
+
+      const qrcodeJson = (await qrcodeResponse.json()) as TuyaQrCodeResponse;
+
+      if (!qrcodeJson.success || !qrcodeJson.result) {
+        throw new Error(qrcodeJson.msg ?? qrcodeJson.code);
+      }
+
+      this.homey.settings.set(USER_CODE_KEY, userCode);
+
+      const qrcode = qrcodeJson.result.qrcode;
+      waitForQrCodeScan(qrcode, userCode)
+        .then(res => {
+          if (res !== undefined) {
+            return session.nextView();
+          }
+        })
+        .finally(() => {
+          waitingForQrScan = false;
+        });
+      return await QRCode.toDataURL(`tuyaSmart--qrLogin?token=${qrcode}`, {
+        errorCorrectionLevel: 'H',
+        type: 'image/webp',
+        width: 1024,
+      });
+    });
+
+    session.setHandler('list_devices', async () => {
+      const devices = await this.onPairListDevices({
+        oAuth2Client: client,
+      });
+
+      return devices.map(device => {
+        return {
+          ...device,
+          store: {
+            ...device.store,
+            OAuth2SessionId,
+            OAuth2ConfigId,
+          },
+        };
+      });
+    });
+
+    session.setHandler('disconnect', async () => {
+      this.log('Disconnected');
+      waitingForQrScan = false;
+    });
+  }
+
+  async onPairListDevices({ oAuth2Client }: { oAuth2Client: TuyaHasClient }): Promise<OAuth2DeviceResult[]> {
     const devices = await oAuth2Client.getDevices();
     const filteredDevices = devices.filter(device => {
       return !oAuth2Client.isRegistered(device.product_id, device.id) && this.onTuyaPairListDeviceFilter(device);
