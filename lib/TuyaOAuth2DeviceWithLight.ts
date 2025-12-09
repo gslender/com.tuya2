@@ -44,7 +44,10 @@ export default class TuyaOAuth2DeviceWithLight extends TuyaOAuth2Device {
     const workMode = status['work_mode'] as 'white' | 'colour' | string | undefined;
     const lightTemp = status[this.LIGHT_TEMP_TUYA_CAPABILITY] as number | undefined;
     const lightDim = status[this.LIGHT_DIM_TUYA_CAPABILITY] as number | undefined;
-    const lightColor = status[this.LIGHT_COLOR_TUYA_CAPABILITY] as ParsedColourData | undefined;
+    const unparsedLightColor = status[this.LIGHT_COLOR_TUYA_CAPABILITY];
+    const lightColor = (
+      typeof unparsedLightColor === 'string' ? JSON.parse(unparsedLightColor) : status[this.LIGHT_COLOR_TUYA_CAPABILITY]
+    ) as ParsedColourData | undefined;
 
     if (workMode === 'white') {
       await this.safeSetCapabilityValue('light_mode', 'temperature');
