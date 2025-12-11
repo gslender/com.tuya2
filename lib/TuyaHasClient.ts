@@ -137,13 +137,13 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
       // code 1010 means the refresh token is also expired?
       if (responseBodyJson.code === '-9999999') {
         if (didRefreshToken) {
-          throw new TuyaOAuth2Error('Access token expired, even after refresh');
+          throw new TuyaOAuth2Error(this.homey.__('error_refreshing_token'));
         }
 
         await this.refreshToken();
         return this._executeRequest({ method, path, json, query, headers }, true);
       } else if (responseBodyJson.code === '1010') {
-        throw new TuyaOAuth2Error('Refresh token expired');
+        throw new TuyaOAuth2Error(this.homey.__('error_refreshing_token'));
       }
       throw new Error(`[${responseBodyJson.code}] ${responseBodyJson.msg}`);
     }
@@ -355,6 +355,19 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
   isRegistered(productId: string, deviceId: string, other = false): boolean {
     const register = other ? this.registeredOtherDevices : this.registeredDevices;
     return register.has(deviceId);
+  }
+
+  save(): void {
+    this.resetMqtt();
+    super.save();
+  }
+
+  resetMqtt(): void {
+    this.mqttClient?.end(true);
+    this.mqttClient = undefined;
+    this.mqttPromise = undefined;
+    this.registeredDevices.clear();
+    this.registeredOtherDevices.clear();
   }
 
   async connectToMqtt(): Promise<void> {

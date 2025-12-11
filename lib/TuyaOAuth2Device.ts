@@ -57,7 +57,10 @@ export default class TuyaOAuth2Device extends OAuth2Device<TuyaHasClient> {
    */
   async onOAuth2Init(): Promise<void> {
     await super.onOAuth2Init();
+    await this.registerDevice();
+  }
 
+  private async registerDevice(): Promise<void> {
     const isOtherDevice = this.driver.id === 'other';
 
     this.oAuth2Client.registerDevice(
@@ -78,6 +81,10 @@ export default class TuyaOAuth2Device extends OAuth2Device<TuyaHasClient> {
       this.__syncInterval = this.homey.setInterval(this.__sync, TuyaOAuth2Device.SYNC_INTERVAL);
     }
     await this.__sync();
+  }
+
+  async onOAuth2Saved(): Promise<void> {
+    await this.registerDevice();
   }
 
   async onOAuth2Uninit(): Promise<void> {
