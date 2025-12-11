@@ -11,17 +11,16 @@ import {
   TuyaWebRTC,
 } from '../types/TuyaApiTypes';
 import * as TuyaOAuth2Util from './TuyaOAuth2Util';
-import TuyaHasToken from './TuyaHasToken';
+import TuyaHaToken from './TuyaHaToken';
 import {
-  TuyaHasHome,
+  TuyaHaHome,
   TuyaHasResponse,
-  TuyaHasScenesResponse,
-  TuyaHasStatus,
-  TuyaHasStatusResponse,
+  TuyaHaScenesResponse,
+  TuyaHaStatusResponse,
   TuyaMqttConfigResponse,
   TuyaMqttMessage,
   TuyaTokenRefreshResponse,
-} from '../types/TuyaHasApiTypes';
+} from '../types/TuyaHaApiTypes';
 import crypto from 'crypto';
 import TuyaOAuth2Error from './TuyaOAuth2Error';
 import { DeviceRegistration } from '../types/TuyaTypes';
@@ -29,8 +28,8 @@ import mqtt from 'mqtt';
 
 type OAuth2SessionInformation = { id: string; title: string };
 
-export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
-  static TOKEN = TuyaHasToken;
+export default class TuyaHaClient extends OAuth2Client<TuyaHaToken> {
+  static TOKEN = TuyaHaToken;
   static API_URL = '<dummy>';
   static TOKEN_URL = '<dummy>';
   static AUTHORIZATION_URL = 'https://openapi.tuyaus.com/login';
@@ -168,7 +167,7 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
       isTokenRefresh: true,
     })
       .then(res => {
-        const newToken = new TuyaHasToken({
+        const newToken = new TuyaHaToken({
           ...token.toJSON(),
           access_token: res.accessToken,
           refresh_token: res.refreshToken,
@@ -200,7 +199,7 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
     });
   }
 
-  async getHasHomes(): Promise<TuyaHasHome[]> {
+  async getHasHomes(): Promise<TuyaHaHome[]> {
     return this._get(`/v1.0/m/life/users/homes`);
   }
 
@@ -225,7 +224,7 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
     return devices[0];
   }
 
-  async getHasScenes(spaceId: string | number): Promise<TuyaHasScenesResponse> {
+  async getHasScenes(spaceId: string | number): Promise<TuyaHaScenesResponse> {
     return this.get({
       path: '/v1.0/m/scene/ha/home/scenes',
       query: { homeId: spaceId },
@@ -250,7 +249,7 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
   }
 
   async queryDataPointsSpecification(deviceId: string): Promise<TuyaDeviceDataPointResponse> {
-    const response = await this.get<TuyaHasStatusResponse>({
+    const response = await this.get<TuyaHaStatusResponse>({
       path: `/v1.0/m/life/devices/${deviceId}/status`,
     });
     return {
@@ -446,5 +445,5 @@ export default class TuyaHasClient extends OAuth2Client<TuyaHasToken> {
   }
 }
 
-TuyaHasClient.setMaxListeners(Infinity);
-module.exports = TuyaHasClient;
+TuyaHaClient.setMaxListeners(Infinity);
+module.exports = TuyaHaClient;

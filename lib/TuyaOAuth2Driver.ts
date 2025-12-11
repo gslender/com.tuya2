@@ -10,9 +10,9 @@ import { sendSetting } from './TuyaOAuth2Util';
 import PairSession from 'homey/lib/PairSession';
 import { URL } from 'url';
 import { Response } from 'node-fetch';
-import { type TuyaQrCodeResponse } from '../types/TuyaHasApiTypes';
-import TuyaHasToken from './TuyaHasToken';
-import TuyaHasClient from './TuyaHasClient';
+import { type TuyaQrCodeResponse } from '../types/TuyaHaApiTypes';
+import TuyaHaToken from './TuyaHaToken';
+import TuyaHaClient from './TuyaHaClient';
 import QRCode from 'qrcode';
 import type TuyaOAuth2Device from './TuyaOAuth2Device';
 
@@ -33,7 +33,7 @@ export type ListDeviceProperties = {
 
 const USER_CODE_KEY = 'TUYA_USER_CODE';
 
-export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHasClient> {
+export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHaClient> {
   TUYA_DEVICE_CATEGORIES: ReadonlyArray<string> = [];
 
   async onRepair(session: PairSession, device?: TuyaOAuth2Device): Promise<void> {
@@ -43,7 +43,7 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHasClient> {
   async onPair(session: PairSession, device?: TuyaOAuth2Device): Promise<void> {
     const OAuth2ConfigId = this.getOAuth2ConfigId();
     let OAuth2SessionId = '$new';
-    let client: TuyaHasClient = this.homey.app.createOAuth2Client({
+    let client: TuyaHaClient = this.homey.app.createOAuth2Client({
       sessionId: OAuth2Util.getRandomId(),
       configId: OAuth2ConfigId,
     });
@@ -79,7 +79,7 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHasClient> {
       }
     });
 
-    const waitForQrCodeScan = async (qrcode: string, userCode: string): Promise<TuyaHasClient | undefined> => {
+    const waitForQrCodeScan = async (qrcode: string, userCode: string): Promise<TuyaHaClient | undefined> => {
       const url = new URL(`https://apigw.iotbing.com/v1.0/m/life/home-assistant/qrcode/tokens/${qrcode}`);
       url.searchParams.append('clientid', clientId);
       url.searchParams.append('usercode', userCode);
@@ -109,7 +109,7 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHasClient> {
           }
 
           const tokenResult = tokenJson.result;
-          const token = new TuyaHasToken(tokenResult);
+          const token = new TuyaHaToken(tokenResult);
           client.setToken({
             token: token,
           });
@@ -211,7 +211,7 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHasClient> {
     });
   }
 
-  async onPairListDevices({ oAuth2Client }: { oAuth2Client: TuyaHasClient }): Promise<OAuth2DeviceResult[]> {
+  async onPairListDevices({ oAuth2Client }: { oAuth2Client: TuyaHaClient }): Promise<OAuth2DeviceResult[]> {
     const devices = await oAuth2Client.getDevices();
     const filteredDevices = devices.filter(device => {
       return !oAuth2Client.isRegistered(device.product_id, device.id) && this.onTuyaPairListDeviceFilter(device);

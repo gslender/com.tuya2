@@ -1,6 +1,6 @@
 import { OAuth2Token } from 'homey-oauth2app';
 
-export default class TuyaHasToken extends OAuth2Token {
+export default class TuyaHaToken extends OAuth2Token {
   endpoint: string;
   uid: string;
   expire_time: number;
@@ -52,4 +52,4 @@ export default class TuyaHasToken extends OAuth2Token {
   }
 }
 
-module.exports = TuyaHasToken;
+module.exports = TuyaHaToken;

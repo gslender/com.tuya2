@@ -16,7 +16,7 @@ export type TuyaTokenRefreshResponse = {
   uid: string;
 };
 
-export type TuyaHasHome = {
+export type TuyaHaHome = {
   background: string;
   geoName: string;
   gmtCreate: number;
@@ -57,13 +57,13 @@ export type TuyaMqttMessage = {
 export type TuyaMqttStatus = TuyaMqttStatusDataPoint[];
 export type TuyaMqttStatusDataPoint = { '1': boolean; code: string; t: number; value: unknown };
 
-export type TuyaHasStatusResponse = {
+export type TuyaHaStatusResponse = {
   category: string;
-  dpStatusRelationDTOS: TuyaHasStatus[];
+  dpStatusRelationDTOS: TuyaHaStatus[];
   productKey: string;
 };
 
-export type TuyaHasStatus = {
+export type TuyaHaStatus = {
   dpCode: string;
   dpId: number;
   enumMappingMap: {
@@ -77,16 +77,16 @@ export type TuyaHasStatus = {
   valueType: string;
 };
 
-export type TuyaHasScenesResponse = TuyaHasScene[];
+export type TuyaHaScenesResponse = TuyaHaScene[];
 
-export type TuyaHasScene = {
-  actions: TuyaHasSceneAction[];
+export type TuyaHaScene = {
+  actions: TuyaHaSceneAction[];
   enabled: boolean;
   name: string;
   scene_id: string;
 };
 
-export type TuyaHasSceneAction = {
+export type TuyaHaSceneAction = {
   action_executor: string;
   entity_id: string;
   executor_property: { [key: string]: unknown };

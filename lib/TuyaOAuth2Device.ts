@@ -4,9 +4,9 @@ import type { TuyaCommand, TuyaDeviceDataPointResponse, TuyaStatusResponse, Tuya
 import type { TuyaStatus, TuyaStatusSource } from '../types/TuyaTypes';
 import * as TuyaOAuth2Util from './TuyaOAuth2Util';
 import * as GeneralMigrations from './migrations/GeneralMigrations';
-import TuyaHasClient from './TuyaHasClient';
+import TuyaHaClient from './TuyaHaClient';
 
-export default class TuyaOAuth2Device extends OAuth2Device<TuyaHasClient> {
+export default class TuyaOAuth2Device extends OAuth2Device<TuyaHaClient> {
   __status: TuyaStatus;
   __syncInterval?: NodeJS.Timeout;
 
