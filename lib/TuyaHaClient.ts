@@ -416,10 +416,10 @@ export default class TuyaHaClient extends OAuth2Client<TuyaHaToken> {
       }
 
       if (registeredDevice !== undefined) {
-        await registeredDevice.onStatus('status', status, changedStatusCodes);
+        await registeredDevice.onStatus('status', status, changedStatusCodes).catch(this.error);
       }
       if (registeredOtherDevice !== undefined) {
-        await registeredOtherDevice.onStatus('status', status, changedStatusCodes);
+        await registeredOtherDevice.onStatus('status', status, changedStatusCodes).catch(this.error);
       }
     });
     resolveMqttPromise();
