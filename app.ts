@@ -1,14 +1,14 @@
+import sourceMapSupport from 'source-map-support';
+sourceMapSupport.install();
+
+import { Log } from '@drenso/homey-log';
 import { OAuth2App } from 'homey-oauth2app';
 import NodeCache from 'node-cache';
 import * as TuyaOAuth2Util from './lib/TuyaOAuth2Util';
-
 import TuyaOAuth2Device from './lib/TuyaOAuth2Device';
-import sourceMapSupport from 'source-map-support';
 import type { TuyaDeviceDataPoint, TuyaDeviceDataPointResponse, TuyaStatusResponse } from './types/TuyaApiTypes';
 import { type ArgumentAutocompleteResults } from 'homey/lib/FlowCard';
 import TuyaHaClient from './lib/TuyaHaClient';
-
-sourceMapSupport.install();
 
 const STATUS_CACHE_KEY = 'status';
 const DATAPOINT_CACHE_KEY = 'datapoint';
@@ -33,6 +33,8 @@ module.exports = class TuyaOAuth2App extends OAuth2App {
   static OAUTH2_MULTI_SESSION = false; // TODO: Enable this feature & make nice pairing UI
 
   private apiCache: NodeCache = new NodeCache({ stdTTL: CACHE_TTL });
+
+  homeyLog = new Log({ homey: this.homey });
 
   async onOAuth2Init(): Promise<void> {
     await super.onOAuth2Init();
