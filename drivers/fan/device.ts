@@ -68,7 +68,7 @@ export default class TuyaOAuth2DeviceFan extends TuyaOAuth2DeviceWithLight {
         if (this.getStoreValue('tuya_category') === 'fsd') {
           await this.safeSetCapabilityValue('dim', value);
         } else {
-          await this.safeSetCapabilityValue('legacy_fan_speed', value);
+          await this.safeSetCapabilityValue('legacy_fan_speed', String(value));
         }
       }
     }
