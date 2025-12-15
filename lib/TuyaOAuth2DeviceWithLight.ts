@@ -1,6 +1,7 @@
 import TuyaOAuth2Device from './TuyaOAuth2Device';
 import { ParsedColourData, TuyaStatus } from '../types/TuyaTypes';
 import { TuyaCommand } from '../types/TuyaApiTypes';
+import { hasJsonStructure } from './TuyaOAuth2Util';
 
 /**
  * Handles all light-related capabilities, except onoff
@@ -46,8 +47,10 @@ export default class TuyaOAuth2DeviceWithLight extends TuyaOAuth2Device {
     const lightDim = status[this.LIGHT_DIM_TUYA_CAPABILITY] as number | undefined;
     const unparsedLightColor = status[this.LIGHT_COLOR_TUYA_CAPABILITY];
     const lightColor = (
-      typeof unparsedLightColor === 'string' ? JSON.parse(unparsedLightColor) : status[this.LIGHT_COLOR_TUYA_CAPABILITY]
-    ) as ParsedColourData | undefined;
+      typeof unparsedLightColor === 'string' && hasJsonStructure(unparsedLightColor)
+        ? JSON.parse(unparsedLightColor)
+        : status[this.LIGHT_COLOR_TUYA_CAPABILITY]
+    ) as ParsedColourData | undefined | string;
 
     if (workMode === 'white') {
       await this.safeSetCapabilityValue('light_mode', 'temperature');
@@ -69,7 +72,7 @@ export default class TuyaOAuth2DeviceWithLight extends TuyaOAuth2Device {
       await this.safeSetCapabilityValue(this.LIGHT_DIM_CAPABILITY, dim);
     }
 
-    if (lightColor) {
+    if (lightColor && typeof lightColor !== 'string') {
       const specs = this.store[this.LIGHT_COLOR_TUYA_SPECS];
       const h = (lightColor.h - specs.h.min) / (specs.h.max - specs.h.min);
       const s = (lightColor.s - specs.s.min) / (specs.s.max - specs.s.min);
