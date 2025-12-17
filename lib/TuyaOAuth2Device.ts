@@ -73,9 +73,9 @@ export default class TuyaOAuth2Device extends OAuth2Device<TuyaHaClient> {
 
     this.oAuth2Client.on('token_error', value => {
       if (value) {
-        this.setUnavailable(this.homey.__('error_refreshing_token'));
+        this.setUnavailable(this.homey.__('error_refreshing_token')).catch(this.error);
       } else {
-        this.setAvailable();
+        this.setAvailable().catch(this.error);
       }
     });
 
