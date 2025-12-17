@@ -171,6 +171,9 @@ export default class TuyaHaClient extends OAuth2Client<TuyaHaToken> {
           refresh_token: res.refreshToken,
         });
         this.setToken({ token: newToken });
+        // Otherwise, the token is not stored in the store!
+        this.save();
+
         this.log('Refreshed token:', newToken);
       })
       .finally(() => {
