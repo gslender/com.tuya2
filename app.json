@@ -1913,6 +1913,64 @@
         ]
       },
       {
+        "id": "camera_ptz_control",
+        "title": {
+          "en": "Move camera"
+        },
+        "titleFormatted": {
+          "en": "Move camera [[direction]] for [[duration]] seconds"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=camera"
+          },
+          {
+            "name": "direction",
+            "type": "dropdown",
+            "title": {
+              "en": "Direction"
+            },
+            "values": [
+              {
+                "id": "0",
+                "label": {
+                  "en": "Up"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Down"
+                }
+              },
+              {
+                "id": "6",
+                "label": {
+                  "en": "Left"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Right"
+                }
+              }
+            ]
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "title": {
+              "en": "Duration"
+            },
+            "min": 0,
+            "placeholder": "0.1"
+          }
+        ]
+      },
+      {
         "id": "circuit_breaker_child_lock",
         "title": {
           "en": "Set child lock"
