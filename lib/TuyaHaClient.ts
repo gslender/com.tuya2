@@ -7,6 +7,8 @@ import {
   type TuyaDeviceDataPointResponse,
   TuyaDeviceResponse,
   TuyaDeviceSpecificationResponse,
+  TuyaIrRemoteKeysResponse,
+  TuyaIrRemoteResponse,
   TuyaStatusResponse,
   TuyaWebRTC,
 } from '../types/TuyaApiTypes';
@@ -343,6 +345,46 @@ export default class TuyaHaClient extends OAuth2Client<TuyaHaToken> {
       this.log('POST Response', requestId, JSON.stringify(result));
 
       return result;
+    });
+  }
+
+  /*
+   * Infrared
+   */
+  async getRemotes(infraredControllerId: string): Promise<TuyaIrRemoteResponse[]> {
+    return [];
+    // return this._get(`/v2.0/infrareds/${infraredControllerId}/remotes`);
+  }
+
+  async getRemoteKeys(infraredControllerId: string, infraredRemoteId: string): Promise<TuyaIrRemoteKeysResponse> {
+    throw new Error('Not implemented');
+    // return this._get(`/v2.0/infrareds/${infraredControllerId}/remotes/${infraredRemoteId}/keys`);
+  }
+
+  async sendKeyCommand(
+    infraredControllerId: string,
+    infraredRemoteId: string,
+    categoryId: number,
+    keyId?: number,
+    keyString?: string,
+  ): Promise<boolean> {
+    throw new Error('Not implemented');
+    // return this._post(`/v2.0/infrareds/${infraredControllerId}/remotes/${infraredRemoteId}/raw/command`, {
+    //   category_id: categoryId,
+    //   key_id: keyId,
+    //   key: keyString,
+    // });
+  }
+
+  async sendAircoCommand(
+    infraredControllerId: string,
+    infraredRemoteId: string,
+    code: string,
+    value: number,
+  ): Promise<boolean> {
+    return this._post(`/v2.0/infrareds/${infraredControllerId}/air-conditioners/${infraredRemoteId}/command`, {
+      code: code,
+      value: value,
     });
   }
 
