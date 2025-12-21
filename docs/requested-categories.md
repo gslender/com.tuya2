@@ -102,7 +102,7 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
 
 It is currently impossible to support the following categories:
 
-- IR devices
+- wnykq - IR devices
   - Maxicool/Mitshubishi split unit Airco
   - IR controlled airco
   - Nedis Smart Wi-Fi Remote Control
