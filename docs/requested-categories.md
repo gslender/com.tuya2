@@ -42,6 +42,9 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
   - cjkg - Scene switch
     - MOES 6 gang wall light + scene switch
 
+  - clkg - Curtain switch
+    - Curtain switch
+
   - cwysj - Pet fountain
     - Pet Water Fountain
 
@@ -53,6 +56,7 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
 
   - jtmspro - Residential lock pro
     - Flient Smart door Lock
+    - RAYKUBE K20
 
   - mal - Alarm Host
     - Supplement Staniot Security Panel 3
@@ -87,6 +91,9 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
 
   - xxj - Diffuser
     - Geurdiffuser WiFi AliExpress
+
+  - ydkt - Not documented
+    - Evolar EVO-14000CHW mobile airco
 
   - ywcgq - Not documented
     - Water level monitor

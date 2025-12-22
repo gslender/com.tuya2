@@ -1,6 +1,6 @@
 # Device request
 
-You have found a device that we do not support yet. That's great! You can request support, but please provide us with the information noted below.
+You have found a device that we do not support yet. That's great! You can request support, but please provide us with the information noted below and make sure to sent one device per request.
 
 Also, please check whether support might have already been requested! See our [requested categories](./requested-categories.md).
 
