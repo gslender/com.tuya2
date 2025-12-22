@@ -5,7 +5,6 @@ import * as Util from '../../lib/TuyaOAuth2Util';
 import {
   HomeyHumanSensorSettings,
   HUMAN_SENSOR_CAPABILITIES,
-  HUMAN_SENSOR_SETTING_LABELS,
   TuyaHumanSensorSettings,
 } from './TuyaHumanSensorConstants';
 
@@ -43,6 +42,6 @@ module.exports = class TuyaOAuth2DeviceSensorHuman extends TuyaOAuth2DeviceSenso
       'far_detection',
     ]);
 
-    return Util.onSettings(this, tuyaSettings, HUMAN_SENSOR_SETTING_LABELS);
+    return Util.onSettings(this, tuyaSettings, this.SETTING_LABELS);
   }
 };

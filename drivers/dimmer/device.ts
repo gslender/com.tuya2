@@ -2,7 +2,7 @@ import { TUYA_PERCENTAGE_SCALING } from '../../lib/TuyaOAuth2Constants';
 import TuyaOAuth2Device from '../../lib/TuyaOAuth2Device';
 import { TuyaCommand } from '../../types/TuyaApiTypes';
 import { SettingsEvent, TuyaStatus } from '../../types/TuyaTypes';
-import { DIMMER_SETTING_LABELS, HomeyDimmerSettings, TuyaDimmerSettings } from './TuyaDimmerConstants';
+import { HomeyDimmerSettings, TuyaDimmerSettings } from './TuyaDimmerConstants';
 import * as TuyaOAuth2Util from '../../lib/TuyaOAuth2Util';
 
 export default class TuyaOAuth2DeviceDimmer extends TuyaOAuth2Device {
@@ -96,7 +96,7 @@ export default class TuyaOAuth2DeviceDimmer extends TuyaOAuth2Device {
   }
 
   async onSettings(event: SettingsEvent<HomeyDimmerSettings>): Promise<string | void> {
-    return TuyaOAuth2Util.onSettings<TuyaDimmerSettings>(this, event, DIMMER_SETTING_LABELS);
+    return TuyaOAuth2Util.onSettings<TuyaDimmerSettings>(this, event, this.SETTING_LABELS);
   }
 
   async commandAll(codes: string[], value: unknown): Promise<void> {

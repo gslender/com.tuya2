@@ -6,7 +6,7 @@ import {
   TuyaDeviceResponse,
   TuyaDeviceSpecificationResponse,
 } from '../../types/TuyaApiTypes';
-import { SIREN_CAPABILITIES_MAPPING, SIREN_FLOWS, SIREN_SETTING_LABELS } from './TuyaSirenConstants';
+import { SIREN_CAPABILITIES_MAPPING, SIREN_FLOWS } from './TuyaSirenConstants';
 
 module.exports = class TuyaOAuth2DriverSiren extends TuyaOAuth2Driver {
   TUYA_DEVICE_CATEGORIES = [DEVICE_CATEGORIES.SECURITY_VIDEO_SURV.SIREN_ALARM] as const;
@@ -15,7 +15,7 @@ module.exports = class TuyaOAuth2DriverSiren extends TuyaOAuth2Driver {
     await super.onInit();
 
     for (const setting of SIREN_FLOWS.setting) {
-      this.addSettingFlowHandler(setting, SIREN_SETTING_LABELS);
+      this.addSettingFlowHandler(setting, this.SETTING_LABELS);
     }
   }
 

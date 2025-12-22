@@ -1,5 +1,3 @@
-import TRANSLATIONS from './translations.json';
-
 export const GRAGE_DOOR_CAPABILITIES_MAPPING = {
   switch_1: 'garagedoor_closed',
   doorcontact_state: 'alarm_contact',
@@ -17,5 +15,3 @@ export type HomeyGarageDoorSettings = {
 export type TuyaGarageDoorSettings = {
   tr_timecon: number;
 };
-
-export const GARAGE_DOOR_SETTING_LABELS = TRANSLATIONS.setting_labels;

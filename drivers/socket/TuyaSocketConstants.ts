@@ -1,7 +1,3 @@
-import TRANSLATIONS from './translations.json';
-
-export const SOCKET_SETTING_LABELS = TRANSLATIONS.setting_labels;
-
 export type HomeySocketSettings = {
   child_lock: boolean;
   relay_status: 'power_on' | 'power_off' | 'last';

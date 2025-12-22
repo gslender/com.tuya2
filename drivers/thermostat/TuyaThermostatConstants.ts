@@ -1,5 +1,4 @@
 import { ScaledProperty } from '../../types/TuyaTypes';
-import TRANSLATIONS from './translations.json';
 
 export const THERMOSTAT_CAPABILITIES_MAPPING = {
   switch: 'onoff',
@@ -70,5 +69,3 @@ export type TuyaThermostatSettings = {
   backlight_enum: 'closed' | 'half_bright' | 'full_bright';
   window_check: boolean;
 };
-
-export const THERMOSTAT_SETTING_LABELS = TRANSLATIONS.setting_labels;

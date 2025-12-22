@@ -1,8 +1,4 @@
-import TRANSLATIONS from './translations.json';
-
 // Map from setting id to human-readable label
-export const DIMMER_SETTING_LABELS = TRANSLATIONS.setting_labels;
-
 export const SIMPLE_DIMMER_CAPABILITIES = {
   read_write: ['switch_led_1', 'bright_value_1', 'switch_led_2', 'bright_value_2', 'switch_led_3', 'bright_value_3'],
   read_only: [],

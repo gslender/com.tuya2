@@ -3,7 +3,6 @@ import { constIncludes, getFromMap } from '../TuyaOAuth2Util';
 import { SettingsEvent, TuyaStatus } from '../../types/TuyaTypes';
 import {
   CAMERA_ALARM_EVENT_CAPABILITIES,
-  CAMERA_SETTING_LABELS,
   HomeyCameraSettings,
   SIMPLE_CAMERA_CAPABILITIES,
   TuyaCameraSettings,
@@ -186,7 +185,7 @@ abstract class TuyaOAuth2DeviceWithCamera extends TuyaTimeOutAlarmDevice {
       'basic_flip',
       'basic_indicator',
     ]);
-    return await TuyaOAuth2Util.onSettings<TuyaCameraSettings>(this, tuyaSettingsEvent, CAMERA_SETTING_LABELS);
+    return await TuyaOAuth2Util.onSettings<TuyaCameraSettings>(this, tuyaSettingsEvent, this.SETTING_LABELS);
   }
 }
 

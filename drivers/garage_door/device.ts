@@ -4,7 +4,6 @@ import { SettingsEvent, TuyaStatus } from '../../types/TuyaTypes';
 import { constIncludes } from '../../lib/TuyaOAuth2Util';
 import {
   GARAGE_DOOR_CAPABILITIES,
-  GARAGE_DOOR_SETTING_LABELS,
   GRAGE_DOOR_CAPABILITIES_MAPPING,
   HomeyGarageDoorSettings,
 } from './TuyaGarageDoorConstants';
@@ -46,6 +45,6 @@ module.exports = class TuyaOAuth2DeviceGarageDoor extends TuyaOAuth2Device {
   }
 
   onSettings(event: SettingsEvent<HomeyGarageDoorSettings>): Promise<string | void> {
-    return TuyaOAuth2Util.onSettings(this, event, GARAGE_DOOR_SETTING_LABELS);
+    return TuyaOAuth2Util.onSettings(this, event, this.SETTING_LABELS);
   }
 };

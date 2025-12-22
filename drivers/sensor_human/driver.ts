@@ -7,7 +7,7 @@ import {
   TuyaDeviceSpecificationResponse,
 } from '../../types/TuyaApiTypes';
 import { constIncludes } from '../../lib/TuyaOAuth2Util';
-import { HUMAN_SENSOR_CAPABILITIES, HUMAN_SENSOR_FLOWS, HUMAN_SENSOR_SETTING_LABELS } from './TuyaHumanSensorConstants';
+import { HUMAN_SENSOR_CAPABILITIES, HUMAN_SENSOR_FLOWS } from './TuyaHumanSensorConstants';
 import { StandardDeviceFlowArgs } from '../../types/TuyaTypes';
 
 module.exports = class TuyaOAuth2DriverHuman extends TuyaOAuth2DriverSensor {
@@ -17,7 +17,7 @@ module.exports = class TuyaOAuth2DriverHuman extends TuyaOAuth2DriverSensor {
     await super.onInit();
 
     for (const setting of HUMAN_SENSOR_FLOWS.setting) {
-      this.addSettingFlowHandler(setting, HUMAN_SENSOR_SETTING_LABELS);
+      this.addSettingFlowHandler(setting, this.SETTING_LABELS);
     }
 
     this.homey.flow

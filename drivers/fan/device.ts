@@ -3,7 +3,6 @@ import {
   FAN_CAPABILITIES,
   FAN_CAPABILITIES_MAPPING,
   FAN_LIGHT_CAPABILITIES_MAPPING,
-  FAN_SETTING_LABELS,
   HomeyFanSettings,
   TuyaFanSettings,
 } from './TuyaFanConstants';
@@ -125,7 +124,7 @@ export default class TuyaOAuth2DeviceFan extends TuyaOAuth2DeviceWithLight {
       'fan_direction',
     ]);
 
-    return TuyaOAuth2Util.onSettings<TuyaFanSettings>(this, tuyaSettingsEvent, FAN_SETTING_LABELS);
+    return TuyaOAuth2Util.onSettings<TuyaFanSettings>(this, tuyaSettingsEvent, this.SETTING_LABELS);
   }
 }
 

@@ -4,7 +4,6 @@ import * as TuyaOAuth2Util from '../../lib/TuyaOAuth2Util';
 import { SettingsEvent, TuyaStatus } from '../../types/TuyaTypes';
 import {
   WINDOW_COVERINGS_CAPABILITY_MAPPING,
-  WINDOW_COVERINGS_SETTING_LABELS,
   HomeyWindowCoveringsSettings,
   TuyaWindowCoveringsSettings,
 } from './TuyaWindowCoveringsConstants';
@@ -102,6 +101,6 @@ module.exports = class TuyaOAuth2DeviceWindowCoverings extends TuyaOAuth2Device 
       }
     }
 
-    return TuyaOAuth2Util.onSettings(this, tuyaSettings, WINDOW_COVERINGS_SETTING_LABELS);
+    return TuyaOAuth2Util.onSettings(this, tuyaSettings, this.SETTING_LABELS);
   }
 };

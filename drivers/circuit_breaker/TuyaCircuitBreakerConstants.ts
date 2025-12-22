@@ -1,5 +1,3 @@
-import TRANSLATIONS from './translations.json';
-
 export const CIRCUIT_BREAKER_CAPABILITIES_MAPPING = {
   switch: 'onoff',
   cur_current: 'measure_current',
@@ -25,5 +23,3 @@ export type TuyaCircuitBreakerSettings = {
   child_lock: boolean;
   relay_status: 'power_on' | 'power_off' | 'last';
 };
-
-export const CIRCUIT_BREAKER_SETTING_LABELS = TRANSLATIONS.setting_labels;

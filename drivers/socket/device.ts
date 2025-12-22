@@ -3,7 +3,7 @@ import { Device, FlowCardTriggerDevice } from 'homey';
 import TuyaOAuth2Device from '../../lib/TuyaOAuth2Device';
 import * as TuyaOAuth2Util from '../../lib/TuyaOAuth2Util';
 import { SettingsEvent, TuyaStatus } from '../../types/TuyaTypes';
-import { SOCKET_SETTING_LABELS, HomeySocketSettings, TuyaSocketSettings } from './TuyaSocketConstants';
+import { HomeySocketSettings, TuyaSocketSettings } from './TuyaSocketConstants';
 
 /**
  * Device Class for Tuya Sockets
@@ -174,7 +174,7 @@ export default class TuyaOAuth2DeviceSocket extends TuyaOAuth2Device {
       tuyaSettingsEvent.newSettings = mappedNewSettings;
     }
 
-    return await TuyaOAuth2Util.onSettings<TuyaSocketSettings>(this, tuyaSettingsEvent, SOCKET_SETTING_LABELS);
+    return await TuyaOAuth2Util.onSettings<TuyaSocketSettings>(this, tuyaSettingsEvent, this.SETTING_LABELS);
   }
 }
 

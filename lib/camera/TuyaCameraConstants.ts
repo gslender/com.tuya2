@@ -1,7 +1,3 @@
-import TRANSLATIONS from './translations.json';
-// Map from setting id to human-readable label
-export const CAMERA_SETTING_LABELS = TRANSLATIONS.setting_labels;
-
 // Capabilities that are simple commands/statuses
 export const SIMPLE_CAMERA_CAPABILITIES = {
   read_write: ['cruise_switch', 'siren_switch'],

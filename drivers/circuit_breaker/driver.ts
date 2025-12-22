@@ -6,11 +6,7 @@ import {
   TuyaDeviceResponse,
   TuyaDeviceSpecificationResponse,
 } from '../../types/TuyaApiTypes';
-import {
-  CIRCUIT_BREAKER_CAPABILITIES,
-  CIRCUIT_BREAKER_CAPABILITIES_MAPPING,
-  CIRCUIT_BREAKER_SETTING_LABELS,
-} from './TuyaCircuitBreakerConstants';
+import { CIRCUIT_BREAKER_CAPABILITIES, CIRCUIT_BREAKER_CAPABILITIES_MAPPING } from './TuyaCircuitBreakerConstants';
 
 module.exports = class TuyaOAuth2DriverCircuitBreaker extends TuyaOAuth2Driver {
   TUYA_DEVICE_CATEGORIES = [DEVICE_CATEGORIES.ENERGY.CIRCUIT_BREAKER] as const;
@@ -18,7 +14,7 @@ module.exports = class TuyaOAuth2DriverCircuitBreaker extends TuyaOAuth2Driver {
   async onInit(): Promise<void> {
     await super.onInit();
 
-    this.addSettingFlowHandler('child_lock', CIRCUIT_BREAKER_SETTING_LABELS);
+    this.addSettingFlowHandler('child_lock', this.SETTING_LABELS);
   }
 
   onTuyaPairListDeviceProperties(

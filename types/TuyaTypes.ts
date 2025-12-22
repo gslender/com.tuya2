@@ -46,3 +46,16 @@ export type Locale = 'en';
 export type Translation = {
   [locale in Locale]: string;
 };
+
+export type DriverManifest = {
+  settings: SettingManifest[];
+};
+
+export type SettingManifest = {
+  type: string;
+  id: string;
+  label: string | Translation;
+} & {
+  type: 'group';
+  children: SettingManifest[];
+};

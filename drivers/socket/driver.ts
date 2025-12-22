@@ -8,7 +8,6 @@ import {
   TuyaDeviceSpecificationResponse,
 } from '../../types/TuyaApiTypes';
 import type TuyaOAuth2DeviceSocket from './device';
-import { SOCKET_SETTING_LABELS } from './TuyaSocketConstants';
 import { fillTranslatableObject } from '../../lib/TuyaOAuth2Util';
 import TRANSLATIONS from './translations.json';
 
@@ -97,7 +96,7 @@ module.exports = class TuyaOAuth2DriverSocket extends TuyaOAuth2Driver {
     this.homey.flow
       .getActionCard('socket_child_lock')
       .registerRunListener((args: DeviceArgs & { value: boolean }) =>
-        TuyaOAuth2Util.sendSetting(args.device, 'child_lock', args.value, SOCKET_SETTING_LABELS),
+        TuyaOAuth2Util.sendSetting(args.device, 'child_lock', args.value, this.SETTING_LABELS),
       );
   }
 

@@ -1,7 +1,4 @@
 {
-  "setting_labels": {
-    "fan_direction": { "en": "Fan direction" }
-  },
   "capabilitiesOptions": {
     "onoff.fan": {
       "title": {

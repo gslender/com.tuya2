@@ -1,10 +1,6 @@
-import TRANSLATIONS from './translations.json';
-
 export const SIREN_CAPABILITIES_MAPPING = {
   alarm_switch: 'onoff',
 } as const;
-
-export const SIREN_SETTING_LABELS = TRANSLATIONS.setting_labels;
 
 export const SIREN_CAPABILITIES = {
   read_write: [],

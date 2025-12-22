@@ -9,7 +9,6 @@ import {
 import type { StandardFlowArgs } from '../../types/TuyaTypes';
 import {
   CAMERA_ALARM_CAPABILITIES,
-  CAMERA_SETTING_LABELS,
   COMPLEX_CAMERA_CAPABILITIES,
   SIMPLE_CAMERA_CAPABILITIES,
   SIMPLE_CAMERA_FLOWS,
@@ -29,7 +28,7 @@ class TuyaOAuth2DriverWithCamera extends TuyaOAuth2Driver {
 
     // Apply the same way as in onSettings, but for an individual value
     for (const setting of SIMPLE_CAMERA_FLOWS.setting) {
-      this.addSettingFlowHandler(setting, CAMERA_SETTING_LABELS);
+      this.addSettingFlowHandler(setting, this.SETTING_LABELS);
     }
   }
 

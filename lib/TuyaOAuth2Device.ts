@@ -1,14 +1,16 @@
 import { OAuth2Device } from 'homey-oauth2app';
 import type { TuyaCommand, TuyaDeviceDataPointResponse, TuyaStatusResponse, TuyaWebRTC } from '../types/TuyaApiTypes';
 
-import type { TuyaStatus, TuyaStatusSource } from '../types/TuyaTypes';
+import type { Translation, TuyaStatus, TuyaStatusSource } from '../types/TuyaTypes';
 import * as TuyaOAuth2Util from './TuyaOAuth2Util';
 import * as GeneralMigrations from './migrations/GeneralMigrations';
 import TuyaHaClient from './TuyaHaClient';
+import TuyaOAuth2Driver from './TuyaOAuth2Driver';
 
 export default class TuyaOAuth2Device extends OAuth2Device<TuyaHaClient> {
   __status: TuyaStatus;
   __syncInterval?: NodeJS.Timeout;
+  SETTING_LABELS!: Record<string, Translation>;
 
   /**
    * Ensure migrations are finished before the device is used.
@@ -20,6 +22,7 @@ export default class TuyaOAuth2Device extends OAuth2Device<TuyaHaClient> {
     await super.onInit();
     await this.performMigrations();
     this.initBarrier = false;
+    this.SETTING_LABELS = (this.driver as unknown as TuyaOAuth2Driver).SETTING_LABELS;
     this.log('Finished initialization of', this.getName());
   }
 

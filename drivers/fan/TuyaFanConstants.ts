@@ -1,5 +1,3 @@
-import TRANSLATIONS from './translations.json';
-
 export const FAN_CAPABILITIES_MAPPING = {
   switch: 'onoff',
   fan_switch: 'onoff',
@@ -47,5 +45,3 @@ export type HomeyFanSettings = {
 export type TuyaFanSettings = {
   fan_direction: 'forward' | 'backward';
 };
-
-export const FAN_SETTING_LABELS = TRANSLATIONS.setting_labels;

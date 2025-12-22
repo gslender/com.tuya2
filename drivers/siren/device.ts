@@ -6,7 +6,6 @@ import {
   HomeSirenSettings,
   SIREN_CAPABILITIES,
   SIREN_CAPABILITIES_MAPPING,
-  SIREN_SETTING_LABELS,
   TuyaSirenSettings,
 } from './TuyaSirenConstants';
 
@@ -43,6 +42,6 @@ module.exports = class TuyaOAuth2DeviceSiren extends TuyaOAuth2Device {
   }
 
   async onSettings(event: SettingsEvent<HomeSirenSettings>): Promise<string | void> {
-    return await TuyaOAuth2Util.onSettings<TuyaSirenSettings>(this, event, SIREN_SETTING_LABELS);
+    return await TuyaOAuth2Util.onSettings<TuyaSirenSettings>(this, event, this.SETTING_LABELS);
   }
 };

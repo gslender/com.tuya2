@@ -4,7 +4,7 @@ import {
   TuyaDeviceResponse,
   TuyaDeviceSpecificationResponse,
 } from '../types/TuyaApiTypes';
-import type { Locale, StandardFlowArgs, Translation } from '../types/TuyaTypes';
+import type { DriverManifest, Locale, SettingManifest, StandardFlowArgs, Translation } from '../types/TuyaTypes';
 import { getTuyaClientId } from './TuyaHaClientId';
 import * as TuyaOAuth2Util from './TuyaOAuth2Util';
 import { sendSetting } from './TuyaOAuth2Util';
@@ -32,10 +32,37 @@ export type ListDeviceProperties = {
   };
 };
 
+function parseSettingLabels(manifest: DriverManifest): Record<string, Translation> {
+  const labelMap: Record<string, Translation> = {};
+
+  function walk(settings: SettingManifest[]): void {
+    for (const setting of settings) {
+      if (setting.type === 'group') {
+        walk(setting.children);
+      } else {
+        if (typeof setting.label === 'string') {
+          labelMap[setting.id] = { en: setting.label };
+        } else {
+          labelMap[setting.id] = setting.label;
+        }
+      }
+    }
+  }
+
+  walk(manifest.settings);
+  return labelMap;
+}
+
 const USER_CODE_KEY = 'TUYA_USER_CODE';
 
 export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHaClient> {
   TUYA_DEVICE_CATEGORIES: ReadonlyArray<string> = [];
+  SETTING_LABELS!: Record<string, Translation>;
+
+  async onOAuth2Init(): Promise<void> {
+    this.SETTING_LABELS = parseSettingLabels(this.manifest);
+    await super.onOAuth2Init();
+  }
 
   async onRepair(session: PairSession, device?: TuyaOAuth2Device): Promise<void> {
     return this.onPair(session, device);

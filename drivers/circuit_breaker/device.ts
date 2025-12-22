@@ -5,7 +5,6 @@ import * as Util from '../../lib/TuyaOAuth2Util';
 import {
   CIRCUIT_BREAKER_CAPABILITIES,
   CIRCUIT_BREAKER_CAPABILITIES_MAPPING,
-  CIRCUIT_BREAKER_SETTING_LABELS,
   HomeyCircuitBreakerSettings,
   TuyaCircuitBreakerSettings,
 } from './TuyaCircuitBreakerConstants';
@@ -55,6 +54,6 @@ module.exports = class TuyaOAuth2DeviceCircuitBreaker extends TuyaOAuth2Device {
       'relay_status',
     ]);
 
-    return Util.onSettings(this, tuyaSettings, CIRCUIT_BREAKER_SETTING_LABELS);
+    return Util.onSettings(this, tuyaSettings, this.SETTING_LABELS);
   }
 };

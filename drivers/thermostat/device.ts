@@ -7,7 +7,6 @@ import {
   THERMOSTAT_CAPABILITIES,
   THERMOSTAT_CAPABILITIES_MAPPING,
   THERMOSTAT_FLOWS,
-  THERMOSTAT_SETTING_LABELS,
   TuyaThermostatSettings,
 } from './TuyaThermostatConstants';
 
@@ -87,6 +86,6 @@ module.exports = class TuyaOAuth2DeviceThermostat extends TuyaOAuth2Device {
       THERMOSTAT_CAPABILITIES.setting,
     );
 
-    return Util.onSettings(this, tuyaSettings, THERMOSTAT_SETTING_LABELS);
+    return Util.onSettings(this, tuyaSettings, this.SETTING_LABELS);
   }
 };
