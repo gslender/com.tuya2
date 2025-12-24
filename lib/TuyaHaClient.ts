@@ -474,7 +474,7 @@ export default class TuyaHaClient extends OAuth2Client<TuyaHaToken> {
     this.mqttClient.on('message', async (topic, message) => {
       const json = JSON.parse(message.toString()) as TuyaMqttMessage;
 
-      this.log('Incoming MQTT:', json.data);
+      this.log('Incoming MQTT:', JSON.stringify(json.data));
 
       const deviceId = json.data.devId ?? json.data.bizData.devId;
       const dataPoints = json.data.status ?? [];
