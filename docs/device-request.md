@@ -16,7 +16,7 @@ We will need some information about your device. To retrieve this, please:
 
   - Make sure you have the latest version of the Tuya Homey App installed
   - Open https://my.homey.app using a laptop/desktop
-  - Add your device if you didn't already
+  - Add your device if you didn't already (you can always use the "other" category)
   - Open its settings and copy the specifications from the "Device Specification" setting
 
 ⚠️ Please do not use screenshots for this value! We need it in text form to be able to process it.
