@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
-    "compile": "tsc",
+    "build": "tsc",
     "lint": "eslint --ext .ts . --max-warnings=0",
     "fix": "eslint --fix --ext .ts .",
     "validate": "homey app validate --level=verified",
