@@ -14,7 +14,8 @@
       "body": "Open the <b>Tuya Smart</b> or <b>Smart Life</b> app.<br />\n<br />\nTap <b>Me</b> in the bottom right corner.<br />\n<br />\nTap the cog icon in the top right corner.<br />\n<br />\nThen tap <b>Account and Security</b>.<br />\n<br />\nFind your <b>User Code</b> at the bottom, and enter it here.",
       "submit": "Submit"
     },
-    "submit": "Submit"
+    "submit": "Submit",
+    "loading_devices": "Getting device information from Tuya..."
   },
   "connection_failed": "Connection failed",
   "device_offline": "The device seems to be offline. Is it powered on, and connected to the internet?",

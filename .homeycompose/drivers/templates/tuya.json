@@ -24,6 +24,13 @@
       "$template": "qrcode"
     },
     {
+      "id": "retrieve_devices",
+      "template": "loading",
+      "options": {
+        "text": "pair.loading_devices"
+      }
+    },
+    {
       "id": "list_devices",
       "template": "list_devices",
       "navigation": {

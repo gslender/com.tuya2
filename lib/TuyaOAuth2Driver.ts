@@ -97,12 +97,34 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHaClient> {
     }
 
     let waitingForQrScan = true;
+    let foundDevices: OAuth2DeviceResult[] = [];
     const schema = 'haauthorize';
 
     session.setHandler('showView', async view => {
       // Skip authentication if we already have a session
       if (view === 'usercode' && OAuth2SessionId !== '$new' && client.getToken() !== null) {
-        session.showView('list_devices').catch(this.error);
+        session.showView('retrieve_devices').catch(this.error);
+        return;
+      }
+
+      // Loading view to retrieve the devices and workaround timeout issues with slow Tuya responses or a lot of devices
+      if (view === 'retrieve_devices') {
+        const devices = await this.onPairListDevices({
+          oAuth2Client: client,
+        });
+
+        foundDevices = devices.map(device => {
+          return {
+            ...device,
+            store: {
+              ...device.store,
+              OAuth2SessionId,
+              OAuth2ConfigId,
+            },
+          };
+        });
+
+        session.nextView().catch(this.error);
         return;
       }
     });
@@ -225,26 +247,12 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHaClient> {
       });
     });
 
-    session.setHandler('list_devices', async () => {
-      const devices = await this.onPairListDevices({
-        oAuth2Client: client,
-      });
-
-      return devices.map(device => {
-        return {
-          ...device,
-          store: {
-            ...device.store,
-            OAuth2SessionId,
-            OAuth2ConfigId,
-          },
-        };
-      });
-    });
+    session.setHandler('list_devices', async () => foundDevices);
 
     session.setHandler('disconnect', async () => {
       this.log('Disconnected');
       waitingForQrScan = false;
+      foundDevices = [];
     });
   }
 
@@ -255,7 +263,7 @@ export default class TuyaOAuth2Driver extends OAuth2Driver<TuyaHaClient> {
     });
     const listDevices: OAuth2DeviceResult[] = [];
 
-    this.log('Listing devices to pair:');
+    this.log(`Listing ${filteredDevices.length} devices to pair:`);
 
     for (const device of filteredDevices) {
       this.log('Device:', JSON.stringify(TuyaOAuth2Util.redactFields(device)));
