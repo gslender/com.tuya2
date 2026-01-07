@@ -63,6 +63,7 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
 
   - mal - Alarm Host
     - Supplement Staniot Security Panel 3
+    - Houseguard Luma hub
 
   - mc - Door and Window Controller
     - Window Opener (Chain Actuator)
