@@ -4,7 +4,7 @@ import {
   CLIMATE_SENSOR_CAPABILITIES,
 } from './TuyaClimateSensorConstants';
 import TuyaOAuth2DeviceSensor from '../../lib/sensor/TuyaOAuth2DeviceSensor';
-import { constIncludes, getFromMap } from '../../lib/TuyaOAuth2Util';
+import { computeScaleFactor, constIncludes, getFromMap } from '../../lib/TuyaOAuth2Util';
 import { SettingsEvent, TuyaStatus } from '../../types/TuyaTypes';
 import * as TuyaOAuth2Util from '../../lib/TuyaOAuth2Util';
 
@@ -34,7 +34,7 @@ module.exports = class TuyaOAuth2DeviceSensorClimate extends TuyaOAuth2DeviceSen
       }
 
       if (constIncludes(CLIMATE_SENSOR_CAPABILITIES.read_only_scaled, tuyaCapability) && homeyCapability) {
-        const scaling = 10.0 ** Number.parseInt(this.getSetting(`${tuyaCapability}_scaling`) ?? '0', 10);
+        const scaling = computeScaleFactor(this.getSetting(`${tuyaCapability}_scaling`));
         await this.safeSetCapabilityValue(homeyCapability, (status[tuyaCapability] as number) / scaling);
       }
 

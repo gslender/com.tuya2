@@ -1,4 +1,5 @@
 import TuyaOAuth2Device from '../../lib/TuyaOAuth2Device';
+import { computeScaleFactor } from '../../lib/TuyaOAuth2Util';
 import { TuyaStatus } from '../../types/TuyaTypes';
 
 module.exports = class TuyaOAuth2DeviceAirco extends TuyaOAuth2Device {
@@ -30,22 +31,22 @@ module.exports = class TuyaOAuth2DeviceAirco extends TuyaOAuth2Device {
     }
 
     if (typeof status['temp_current'] === 'number') {
-      const scaling = 10.0 ** Number.parseInt(this.getSetting('temp_current_scaling') ?? '0', 10);
+      const scaling = computeScaleFactor(this.getSetting('temp_current_scaling'));
       this.setCapabilityValue('measure_temperature', status['temp_current'] / scaling).catch(this.error);
     }
 
     if (typeof status['temp_set'] === 'number') {
-      const scaling = 10.0 ** Number.parseInt(this.getSetting('temp_set_scaling') ?? '0', 10);
+      const scaling = computeScaleFactor(this.getSetting('temp_set_scaling'));
       this.setCapabilityValue('target_temperature', status['temp_set'] / scaling).catch(this.error);
     }
 
     if (typeof status['humidity_current'] === 'number') {
-      const scaling = 10.0 ** Number.parseInt(this.getSetting('temp_current_scaling') ?? '0', 10);
+      const scaling = computeScaleFactor(this.getSetting('temp_current_scaling'));
       this.setCapabilityValue('measure_humidity', status['humidity_current'] / scaling).catch(this.error);
     }
 
     if (typeof status['humidity_set'] === 'number') {
-      const scaling = 10.0 ** Number.parseInt(this.getSetting('temp_set_scaling') ?? '0', 10);
+      const scaling = computeScaleFactor(this.getSetting('temp_set_scaling'));
       this.setCapabilityValue('target_humidity', status['humidity_set'] / scaling).catch(this.error);
     }
 
@@ -62,7 +63,7 @@ module.exports = class TuyaOAuth2DeviceAirco extends TuyaOAuth2Device {
   }
 
   async targetTemperatureCapabilityListener(value: number): Promise<void> {
-    const scaling = 10.0 ** Number.parseInt(this.getSetting('temp_set_scaling') ?? '0', 10);
+    const scaling = computeScaleFactor(this.getSetting('temp_set_scaling'));
     await this.sendCommand({
       code: 'temp_set',
       value: value * scaling,
@@ -70,7 +71,7 @@ module.exports = class TuyaOAuth2DeviceAirco extends TuyaOAuth2Device {
   }
 
   async targetHumidityCapabilityListener(value: number): Promise<void> {
-    const scaling = 10.0 ** Number.parseInt(this.getSetting('humidity_set_scaling') ?? '0', 10);
+    const scaling = computeScaleFactor(this.getSetting('humidity_set_scaling'));
     await this.sendCommand({
       code: 'humidity_set',
       value: value * scaling,

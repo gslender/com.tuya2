@@ -6,7 +6,7 @@ import {
   DEHUMIDIFIER_CAPABILITY_MAPPING,
   HomeyDehumidifierSettings,
 } from './DehumidifierConstants';
-import { constIncludes, getFromMap } from '../../lib/TuyaOAuth2Util';
+import { computeScaleFactor, constIncludes, getFromMap } from '../../lib/TuyaOAuth2Util';
 
 module.exports = class TuyaOAuth2DeviceDehumidifier extends TuyaOAuth2Device {
   async onOAuth2Init(): Promise<void> {
@@ -30,7 +30,7 @@ module.exports = class TuyaOAuth2DeviceDehumidifier extends TuyaOAuth2Device {
       }
 
       if (constIncludes(DEHUMIDIFIER_CAPABILITIES.read_only_scaled, tuyaCapability)) {
-        const scaling = 10.0 ** Number.parseInt(this.getSetting(`${homeyCapability}_scaling`) ?? '0', 10);
+        const scaling = computeScaleFactor(this.getSetting(`${homeyCapability}_scaling`));
         await this.safeSetCapabilityValue(homeyCapability, (status[tuyaCapability] as number) / scaling);
       }
     }

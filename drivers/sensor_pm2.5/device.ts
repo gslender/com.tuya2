@@ -7,7 +7,7 @@ import {
   SENSOR_PM25_CAPABILITIES,
   SENSOR_PM25_CAPABILITY_MAPPING,
 } from './SensorPm25Constants';
-import { constIncludes, getFromMap } from '../../lib/TuyaOAuth2Util';
+import { computeScaleFactor, constIncludes, getFromMap } from '../../lib/TuyaOAuth2Util';
 
 module.exports = class TuyaOAuth2DeviceSensorPM25 extends TuyaOAuth2DeviceSensor {
   async onOAuth2Init(): Promise<void> {
@@ -36,7 +36,7 @@ module.exports = class TuyaOAuth2DeviceSensorPM25 extends TuyaOAuth2DeviceSensor
       }
 
       if (constIncludes(SENSOR_PM25_CAPABILITIES.read_only_scaled, tuyaCapability) && homeyCapability) {
-        const scaling = 10.0 ** Number.parseInt(this.getSetting(`${homeyCapability}_scaling`) ?? '0', 10);
+        const scaling = computeScaleFactor(this.getSetting(`${homeyCapability}_scaling`));
         await this.safeSetCapabilityValue(homeyCapability, (status[tuyaCapability] as number) / scaling);
       }
     }

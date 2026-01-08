@@ -5,7 +5,7 @@ import {
   IRRIGATOR_CAPABILITIES,
   IRRIGATOR_CAPABILITIES_MAPPING,
 } from './TuyaIrrigatorConstants';
-import { constIncludes, getFromMap, handleScaleSetting } from '../../lib/TuyaOAuth2Util';
+import { computeScaleFactor, constIncludes, getFromMap, handleScaleSetting } from '../../lib/TuyaOAuth2Util';
 
 module.exports = class TuyaOAuth2DeviceIrrigator extends TuyaOAuth2Device {
   async onOAuth2Init(): Promise<void> {
@@ -32,7 +32,7 @@ module.exports = class TuyaOAuth2DeviceIrrigator extends TuyaOAuth2Device {
       }
 
       if (constIncludes(IRRIGATOR_CAPABILITIES.read_only_scaled, tuyaCapability) && homeyCapability) {
-        const scaling = 10.0 ** Number.parseInt(this.getSetting(`${homeyCapability}_scaling`) ?? '0', 10);
+        const scaling = computeScaleFactor(this.getSetting(`${homeyCapability}_scaling`));
         await this.safeSetCapabilityValue(homeyCapability, (value as number) / scaling);
       }
 
