@@ -64,7 +64,8 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
     - RAYKUBE K20
 
   - kj - Air purifier
-    -  Proscenic A9
+    - Proscenic A9
+    - Zedar L600
 
   - mal - Alarm Host
     - Supplement Staniot Security Panel 3
