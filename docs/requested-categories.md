@@ -50,6 +50,9 @@ All defined categories can be found at https://developer.tuya.com/en/docs/iot/st
   - clkg - Curtain switch
     - Curtain switch
 
+  - cwwsq - Pet feeder
+    - Cleverio PF100 smart pet feeder
+
   - cwysj - Pet fountain
     - Pet Water Fountain
 
