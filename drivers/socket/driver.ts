@@ -108,6 +108,7 @@ module.exports = class TuyaOAuth2DriverSocket extends TuyaOAuth2Driver {
     const props = super.onTuyaPairListDeviceProperties(device, specifications, dataPoints);
     props.capabilitiesOptions = {};
     props.store.tuya_switches = [];
+    props.store['_migrations'] = ['socket_energy_scaling'];
 
     // Add this before the sub-capabilities, so it becomes the quick toggle
     props.capabilities.push('onoff');
@@ -196,7 +197,7 @@ module.exports = class TuyaOAuth2DriverSocket extends TuyaOAuth2Driver {
 
       if (tuyaCapability === 'add_ele') {
         if ([0, 1, 2, 3].includes(values.scale)) {
-          props.settings['energy_scaling'] = `${values.scale}`;
+          props.settings['meter_power_scaling'] = `${values.scale}`;
         } else {
           this.error('Unsupported energy scale:', values.scale);
         }

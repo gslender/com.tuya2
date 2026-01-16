@@ -8199,7 +8199,7 @@
           ]
         },
         {
-          "id": "energy_scaling",
+          "id": "meter_power_scaling",
           "label": {
             "en": "Energy Measurement Scale"
           },
