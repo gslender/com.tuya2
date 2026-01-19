@@ -14,14 +14,14 @@ async function energyScalingSettingMigration(device: TuyaOAuth2DeviceSocket): Pr
         .getSpecification(device.data.deviceId)
         .catch(e => device.log('Device specification retrieval failed', e))) ?? undefined;
 
-    let scale;
+    let scale: '0' | '1' | '2' | '3' | undefined;
 
     if (deviceSpecs?.status !== undefined) {
       for (const statusSpecification of deviceSpecs.status) {
         const tuyaCapability = statusSpecification.code;
-        const values: Record<string, number> = JSON.parse(statusSpecification.values);
+        const values: Record<string, 0 | 1 | 2 | 3> = JSON.parse(statusSpecification.values);
         if (tuyaCapability === 'add_ele') {
-          if ([0, 1, 2, 3].includes(values.scale)) {
+          if (([0, 1, 2, 3] as const).includes(values.scale)) {
             scale = `${values.scale}`;
           } else {
             device.error('Unsupported energy scale:', values.scale);
@@ -30,9 +30,14 @@ async function energyScalingSettingMigration(device: TuyaOAuth2DeviceSocket): Pr
       }
     }
 
-    if (scale) {
+    if (scale !== undefined) {
       await device.safeSetSettingValue('meter_power_scaling', scale);
       device.log('Energy scaling set:', scale);
+      if (scale !== '0') {
+        const originalValue = device.getCapabilityValue('meter_power');
+        device.log('Scale factor not equal to 1, resetting meter_power from:', originalValue);
+        await device.safeSetSettingValue('meter_power', 0);
+      }
     } else {
       device.log('Energy scaling left at default');
     }
