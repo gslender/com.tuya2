@@ -46,5 +46,8 @@
   },
   "1.2.5": {
     "en": "Fix 'fan light is on' flow condition"
+  },
+  "1.2.6": {
+    "en": "Resolve issue with energy scaling setting"
   }
 }
